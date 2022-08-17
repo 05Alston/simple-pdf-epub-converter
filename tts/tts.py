@@ -6,6 +6,14 @@ import pyttsx3
 
 speaker = pyttsx3.init() 
 
+
+def textToSpeech(text):
+    engine = pyttsx3.init()
+    engine.setProperty('rate', 100)
+    engine.say(text)
+    engine.runAndWait()
+
+    
 class Button(QPushButton):
     entered = pyqtSignal()
     leaved = pyqtSignal()

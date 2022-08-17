@@ -10,6 +10,8 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from tts import Button
+import pyttsx3
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -60,8 +62,14 @@ class Ui_MainWindow(object):
 
         self.pushButton.setStyleSheet('QPushButton {background-color: rgb(172, 255, 231);} QPushButton:hover {background-color: rgb(122, 255, 231);}')
 
+
+
     def handle_entered(self):
         self.p.setText("go away")
+        engine = pyttsx3.init()
+        engine.setProperty('rate', 100)
+        engine.say("Button Text")
+        engine.runAndWait()
 
     def handle_leaved(self):
         self.p.setText("hover on me")
