@@ -15,6 +15,7 @@
 #Importing modules for Python Project to Convert PDF Text to Audio Speech
 from tkinter import *
 from tkinter import filedialog
+from tkinter import messagebox
 
 from path import Path
 from PyPDF4.pdf import PdfFileReader , PdfFileWriter
@@ -23,7 +24,7 @@ from speech_recognition import Recognizer, AudioFile
 from pydub import AudioSegment
 import os
 #Declaring global variables related to PDF to Speech conversion
-global end_pgNo ,start_pgNo
+global endPg ,startPg
 
 #Function to open the PDF selected and read text from it
 def read():
@@ -32,8 +33,8 @@ def read():
     pdfreader = PdfFileReader(pdfLoc) # Creating a PDF reader object for the opened PDF
     speaker = pyttsx3.init() #Initiating a speaker object
 
-    start=start_pgNo.get() # Getting the starting page number input
-    end=end_pgNo.get() # Getting the ending page number input
+    start=startPg.get() # Getting the starting page number input
+    end=endPg.get() # Getting the ending page number input
 
     #Reading all the pages from start to end page number
     for i in range(start,end+1):
@@ -77,8 +78,7 @@ def pdf_to_audio():
 
     #Button to select the PDF and get the audio input
     Label(wn1, text='Click the below button to Choose the pdf and start to Listen:').place(x=100, y=230)
-    Button(wn1, text="Click Me", bg='ivory3',font=('Courier', 13),
-    command=read).place(x=230, y=260)
+    Button(wn1, text="Click Me", bg='ivory3',font=('Courier', 13),command=read).place(x=230, y=260)
 
     wn1.mainloop()
 
@@ -95,6 +95,9 @@ def write_text(filename, text):
     with pdf_path.open('ab') as output_file: #Opening the PDF
         writer.write(output_file) #saving the text in the writer object
         output_file.write(text) #writing the text in the PDF
+
+
+
 
 #Function to convert audio into text
 def convert():
