@@ -16,6 +16,7 @@
 from tkinter import *
 from tkinter import filedialog
 from tkinter import messagebox
+from time import sleep
 
 from path import Path
 from PyPDF4.pdf import PdfFileReader , PdfFileWriter
@@ -38,10 +39,21 @@ def read(startPg, endPg):
 
     #Reading all the pages from start to end page number
     for i in range(start,end+1):
+        wn4 = Tk()
+        wn4.title("Reader")
+        wn4.geometry('500x400')
+        wn4.config(bg='snow3')
         page = pdfreader.getPage(i) #Getting the page
         txt = page.extractText() #Extracting the text
-        speaker.say(txt) #Getting the audio output of the text
-        speaker.runAndWait() # Processing the voice commands
+        txt_lines = list(map(str, txt.split("\n")))
+        for i in range(len(txt_lines)):
+            print(txt_lines[i])
+            speaker.say(txt_lines[i])
+            speaker.runAndWait()
+        # speaker.say(txt)#Getting the audio output of the text
+        # speaker.runAndWait() # Processing the voice commands
+        
+        wn4.mainloop()
 
 
 
