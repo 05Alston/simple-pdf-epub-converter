@@ -24,17 +24,17 @@ from speech_recognition import Recognizer, AudioFile
 from pydub import AudioSegment
 import os
 #Declaring global variables related to PDF to Speech conversion
-global endPg ,startPg
+# global endPg ,startPg
 
 #Function to open the PDF selected and read text from it
-def read():
+def read(startPg, endPg):
     path = filedialog.askopenfilename() #Get the path of the PDF based on the user's location selection
     pdfLoc = open(path, 'rb') #Opening the PDF
     pdfreader = PdfFileReader(pdfLoc) # Creating a PDF reader object for the opened PDF
     speaker = pyttsx3.init() #Initiating a speaker object
 
-    start=startPg.get() # Getting the starting page number input
-    end=endPg.get() # Getting the ending page number input
+    start=int(startPg.get()) # Getting the starting page number input
+    end=int(endPg.get()) # Getting the ending page number input
 
     #Reading all the pages from start to end page number
     for i in range(start,end+1):
@@ -78,7 +78,7 @@ def pdf_to_audio():
 
     #Button to select the PDF and get the audio input
     Label(wn1, text='Click the below button to Choose the pdf and start to Listen:').place(x=100, y=230)
-    Button(wn1, text="Click Me", bg='ivory3',font=('Courier', 13),command=read).place(x=230, y=260)
+    Button(wn1, text="Click Me", bg='ivory3',font=('Courier', 13),command=lambda: read(startPg, endPg)).place(x=230, y=260)
 
     wn1.mainloop()
 
