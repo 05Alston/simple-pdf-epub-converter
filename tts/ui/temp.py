@@ -9,7 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+from tts import Button
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -17,6 +17,16 @@ class Ui_MainWindow(object):
         MainWindow.resize(800, 600)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+
+
+        self.p = Button(self.centralwidget)
+        self.p.setGeometry(QtCore.QRect(300, 180, 131, 51))
+        self.p.setObjectName("pushButton1")
+
+        self.p.entered.connect(self.handle_entered)
+        self.p.leaved.connect(self.handle_leaved)
+
+
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.setGeometry(QtCore.QRect(500, 180, 131, 51))
         self.pushButton.setObjectName("pushButton")
@@ -50,12 +60,17 @@ class Ui_MainWindow(object):
 
         self.pushButton.setStyleSheet('QPushButton {background-color: rgb(172, 255, 231);} QPushButton:hover {background-color: rgb(122, 255, 231);}')
 
+    def handle_entered(self):
+        self.p.setText("go away")
 
-
+    def handle_leaved(self):
+        self.p.setText("hover on me")
+    
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.p.setText(_translate("MainWindow", "no Hover on me"))
         self.pushButton.setText(_translate("MainWindow", "Hover on me"))
         self.checkBox.setText(_translate("MainWindow", "Hover on me"))
         self.textEdit.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"

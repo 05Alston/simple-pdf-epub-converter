@@ -49,9 +49,9 @@ class Widget(QWidget):
         self.label.setText("Initial Text")
 
 
-app = QApplication(sys.argv)
+# app = QApplication(sys.argv)
 
-window = Widget()
-window.show()
+# window = Widget()
+# window.show()
 
-sys.exit(app.exec())
+# sys.exit(app.exec())
