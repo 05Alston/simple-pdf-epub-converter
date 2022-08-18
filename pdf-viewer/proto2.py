@@ -33,5 +33,11 @@ if __name__ == '__main__':
     else:
         wd = path.dirname(sys.argv[0])
         test_pdf = "exitLoad.pdf"
+        test_html = "index.html"
+        test_file = "ebook/META-INF/container.xml"
+        # if(test_file ==)
         win.webView.setUrl(QUrl(f"file://{wd}/{test_pdf}"))
+
     sys.exit(app.exec_())
+
+
