@@ -12,7 +12,7 @@ FONT.setBold(True)
 
 
 class Window(QTabWidget):
-
+    
     def __init__(self):
         super().__init__()
         self.setMaximumSize(430, 340)

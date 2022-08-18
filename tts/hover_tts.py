@@ -20,7 +20,6 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
-
         self.p = Button(self.centralwidget)
         self.p.setGeometry(QtCore.QRect(300, 180, 131, 51))
         self.p.setObjectName("pushButton1")
@@ -56,9 +55,6 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
-
-        
 
         self.pushButton.setStyleSheet('QPushButton {background-color: rgb(172, 255, 231);} QPushButton:hover {background-color: rgb(122, 255, 231);}')
 
@@ -98,5 +94,3 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
-
-    
