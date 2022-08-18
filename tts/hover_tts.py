@@ -23,68 +23,78 @@ class Ui_MainWindow(object):
         self.p = Button(self.centralwidget)
         self.p.setGeometry(QtCore.QRect(300, 180, 131, 51))
         self.p.setObjectName("pushButton1")
+        self.p.clicked.connect(lambda:self.file_open())
 
         self.p.entered.connect(self.handle_entered)
         self.p.leaved.connect(self.handle_leaved)
 
 
-        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(500, 180, 131, 51))
-        self.pushButton.setObjectName("pushButton")
-        self.checkBox = QtWidgets.QCheckBox(self.centralwidget)
-        self.checkBox.setGeometry(QtCore.QRect(150, 200, 121, 31))
-        self.checkBox.setObjectName("checkBox")
-        self.textEdit = QtWidgets.QTextEdit(self.centralwidget)
-        self.textEdit.setGeometry(QtCore.QRect(350, 310, 104, 71))
-        font = QtGui.QFont()
-        font.setStyleStrategy(QtGui.QFont.PreferDefault)
-        self.textEdit.setFont(font)
-        self.textEdit.setTabChangesFocus(False)
-        self.textEdit.setObjectName("textEdit")
-        self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(280, 70, 201, 71))
-        self.label.setObjectName("label")
+        # self.pushButton = QtWidgets.QPushButton(self.centralwidget)
+        # self.pushButton.setGeometry(QtCore.QRect(500, 180, 131, 51))
+        # self.pushButton.setObjectName("pushButton")
+        # self.checkBox = QtWidgets.QCheckBox(self.centralwidget)
+        # self.checkBox.setGeometry(QtCore.QRect(150, 200, 121, 31))
+        # self.checkBox.setObjectName("checkBox")
+        # self.textEdit = QtWidgets.QTextEdit(self.centralwidget)
+        # self.textEdit.setGeometry(QtCore.QRect(350, 310, 104, 71))
+        # font = QtGui.QFont()
+        # font.setStyleStrategy(QtGui.QFont.PreferDefault)
+        # self.textEdit.setFont(font)
+        # self.textEdit.setTabChangesFocus(False)
+        # self.textEdit.setObjectName("textEdit")
+        # self.label = QtWidgets.QLabel(self.centralwidget)
+        # self.label.setGeometry(QtCore.QRect(280, 70, 201, 71))
+        # self.label.setObjectName("label")
         MainWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 22))
-        self.menubar.setObjectName("menubar")
-        MainWindow.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
-        self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
+        # self.menubar = QtWidgets.QMenuBar(MainWindow)
+        # self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 22))
+        # self.menubar.setObjectName("menubar")
+        # MainWindow.setMenuBar(self.menubar)
+        # self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        # self.statusbar.setObjectName("statusbar")
+        # MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+<<<<<<< Updated upstream
         self.pushButton.setStyleSheet('QPushButton {background-color: rgb(172, 255, 231);} QPushButton:hover {background-color: rgb(122, 255, 231);}')
+=======
+
+        
+
+        # self.pushButton.setStyleSheet('QPushButton {background-color: rgb(172, 255, 231);} QPushButton:hover {background-color: rgb(122, 255, 231);}')
+>>>>>>> Stashed changes
 
 
 
     def handle_entered(self):
-        self.p.setText("go away")
+        self.p.setText("Hovered")
         engine = pyttsx3.init()
-        engine.setProperty('rate', 100)
-        engine.say("Button Text")
+        engine.setProperty('rate', 150)
+        engine.say("Open File")
         engine.runAndWait()
 
     def handle_leaved(self):
-        self.p.setText("hover on me")
+        self.p.setText("Open File")
     
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.p.setText(_translate("MainWindow", "no Hover on me"))
-        self.pushButton.setText(_translate("MainWindow", "Hover on me"))
-        self.checkBox.setText(_translate("MainWindow", "Hover on me"))
-        self.textEdit.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"</style></head><body style=\" font-family:\'Segoe UI\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Dont hover on me</p></body></html>"))
-        self.label.setText(_translate("MainWindow", "Hover your mouse on me"))
-
+        self.p.setText(_translate("MainWindow", "Open File"))
+        # self.pushButton.setText(_translate("MainWindow", "Hover on me"))
+#         self.checkBox.setText(_translate("MainWindow", "Hover on me"))
+#         self.textEdit.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+# "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+# "p, li { white-space: pre-wrap; }\n"
+# "hr { height: 1px; border-width: 0; }\n"
+# "</style></head><body style=\" font-family:\'Segoe UI\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+# "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Dont hover on me</p></body></html>"))
+#         self.label.setText(_translate("MainWindow", "Hover your mouse on me"))
+    def file_open(self):
+        self.name, _ = QtWidgets.QFileDialog.getOpenFileName(None, 'Open File', options=QtWidgets.QFileDialog.DontUseNativeDialog)
+        self.id_label.setText(self.name)
 
 if __name__ == "__main__":
     import sys
