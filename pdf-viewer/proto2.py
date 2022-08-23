@@ -31,12 +31,15 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         win.webView.setUrl(QUrl(f"file://{sys.argv[1]}"))
     else:
-        wd = path.dirname(sys.argv[0])
+        wd = path.abspath(sys.argv[0]).rsplit('/', 1)
+        print(wd[0])
         test_pdf = "exitLoad.pdf"
         test_html = "index.html"
         test_file = "ebook/META-INF/container.xml"
         # if(test_file ==)
-        win.webView.setUrl(QUrl(f"file://{wd}/{test_pdf}"))
+        path = f"file://{wd[0]}/{test_html}"
+        print(path)
+        win.webView.setUrl(QUrl(path))
 
     sys.exit(app.exec_())
 

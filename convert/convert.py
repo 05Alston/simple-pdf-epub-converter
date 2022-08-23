@@ -22,11 +22,11 @@ class Ui_Dialog(object):
         self.pushButton = QtWidgets.QPushButton(Dialog)
         self.pushButton.setGeometry(QtCore.QRect(250, 280, 80, 26))
         self.pushButton.setObjectName("pushButton")
-        self.pushButton.clicked.connect(lambda: self.runscript())
+        self.pushButton.clicked.connect(self.runscript)
         self.pushButton_2 = QtWidgets.QPushButton(Dialog)
         self.pushButton_2.setGeometry(QtCore.QRect(250, 200, 80, 26))
         self.pushButton_2.setObjectName("pushButton_2")
-        self.pushButton_2.clicked.connect(lambda:self.file_open())
+        self.pushButton_2.clicked.connect(self.file_open)
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
