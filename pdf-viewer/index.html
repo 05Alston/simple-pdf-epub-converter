@@ -62,8 +62,8 @@
   <script src="js/jszip.min.js"></script>
   <script src="js/epub.min.js"></script>
   <script>
+    const speech = window.speechSynthesis
       const speak = (text, voice = 0, speed = 1, volume = 1, pitch = 1) => {
-      let speech = window.speechSynthesis
       let utterance = new SpeechSynthesisUtterance(text)
       utterance.voice = speechSynthesis.getVoices()[voice];
       utterance.rate = speed
@@ -71,8 +71,11 @@
       utterance.volume = volume
       speech.cancel()
       return speech.speak(utterance)
-}
-
+    }
+    
+    const isSpeaking=()=>{
+      return speech.speaking
+    }
   </script>
   <script>
 const areaElem = document.querySelector('#area');
@@ -139,9 +142,19 @@ async function loadFile(file) {
     }
     else{
         for(let i = 0; i < inside_bod.length; i ++){ 
+            console.log(i)
             inside_bod[i].setAttribute('id','current_read');
             inside_bod[i].scrollIntoView();
             speak(inside_bod[i].innerHTML);
+            while(isSpeaking()){
+              // (function(){
+                
+              //   window.setTimeout(function(){
+              //   }, 2000);
+                
+              // }(i));
+              setInterval(function () {}, 2000);
+            }
             inside_bod[i].removeAttribute('id');
         }
     }
