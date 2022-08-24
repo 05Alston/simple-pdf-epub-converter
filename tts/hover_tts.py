@@ -19,12 +19,6 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-<<<<<<< Updated upstream
-=======
-        #self.pushButton.setStyleSheet('QPushButton {background-color: rgb(172, 255, 231);} QPushButton:hover {background-color: rgb(122, 255, 231);}')
-
-
->>>>>>> Stashed changes
 
     def handle_entered(self):
         self.p.setText("Hovered")
