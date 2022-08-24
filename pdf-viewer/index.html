@@ -62,21 +62,21 @@
   <script src="js/jszip.min.js"></script>
   <script src="js/epub.min.js"></script>
   <script>
-    const speech = window.speechSynthesis
-      const speak = (text, voice = 0, speed = 1, volume = 1, pitch = 1) => {
-      let utterance = new SpeechSynthesisUtterance(text)
-      utterance.voice = speechSynthesis.getVoices()[voice];
-      utterance.rate = speed
-      utterance.pitch = pitch
-      utterance.volume = volume
-      speech.cancel()
-      return speech.speak(utterance)
-    }
+    // const speech = window.speechSynthesis
+    //   const speak = (text, voice = 0, speed = 1, volume = 1, pitch = 1) => {
+    //   let utterance = new SpeechSynthesisUtterance(text)
+    //   utterance.voice = speechSynthesis.getVoices()[voice];
+    //   utterance.rate = speed
+    //   utterance.pitch = pitch
+    //   utterance.volume = volume
+    //   speech.cancel()
+    //   return speech.speak(utterance)
+    // }
     
-    let isSpeaking=()=>{
-      console.log(speech.speaking)
-      return speech.speaking
-    }
+    // let isSpeaking=()=>{
+    //   console.log(speech.speaking)
+    //   return speech.speaking
+    // }
   </script>
   <script>
 const areaElem = document.querySelector('#area');
@@ -143,20 +143,26 @@ async function loadFile(file) {
     }
     else{
         for(let i = 0; i < inside_bod.length; i ++){ 
-            console.log(i)
+            // console.log(i)
             inside_bod[i].setAttribute('id','current_read');
             inside_bod[i].scrollIntoView();
-            speak(inside_bod[i].innerHTML);
-            while(isSpeaking()){
-              // (function(){
+            // speak(inside_bod[i].innerHTML);
+            // while(isSpeaking()){
+            //   // (function(){
                 
-              //   window.setTimeout(function(){
-              //   }, 2000);
+            //   //   window.setTimeout(function(){
+            //   //   }, 2000);
                 
-              // }(i));
-              // setInterval(function () {}, 200);
-              setTimeout(() => {  console.log("World!"); }, 5000);
-            }
+            //   // }(i));
+            //   // setInterval(function () {}, 200);
+            //   await sleep(2000);
+            //   // setTimeout(() => {  console.log("World!"); }, 5000);
+            // }
+            var msg = new SpeechSynthesisUtterance();
+            msg.text = inside_bod[i].innerHTML;
+            console.log(msg)
+            window.speechSynthesis.speak(msg)
+            
             inside_bod[i].removeAttribute('id');
         }
     }
