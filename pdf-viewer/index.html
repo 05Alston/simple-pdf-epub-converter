@@ -73,7 +73,8 @@
       return speech.speak(utterance)
     }
     
-    const isSpeaking=()=>{
+    let isSpeaking=()=>{
+      console.log(speech.speaking)
       return speech.speaking
     }
   </script>
@@ -153,7 +154,8 @@ async function loadFile(file) {
               //   }, 2000);
                 
               // }(i));
-              setInterval(function () {}, 2000);
+              // setInterval(function () {}, 200);
+              setTimeout(() => {  console.log("World!"); }, 5000);
             }
             inside_bod[i].removeAttribute('id');
         }
