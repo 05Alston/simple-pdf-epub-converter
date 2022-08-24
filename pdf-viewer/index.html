@@ -139,10 +139,10 @@ async function loadFile(file) {
     }
     else{
         for(let i = 0; i < inside_bod.length; i ++){ 
-            //inside_bod[i].setAttribute('id','current_read');
+            inside_bod[i].setAttribute('id','current_read');
             inside_bod[i].scrollIntoView();
             speak(inside_bod[i].innerHTML);
-            //inside_bod[i].removeAttribute('id');
+            inside_bod[i].removeAttribute('id');
         }
     }
     console.log(inside_bod);
