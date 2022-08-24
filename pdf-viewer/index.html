@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ePub viewer</title>
     <style>
       html, body {
@@ -60,6 +62,19 @@
   <script src="js/jszip.min.js"></script>
   <script src="js/epub.min.js"></script>
   <script>
+      const speak = (text, voice = 0, speed = 1, volume = 1, pitch = 1) => {
+      let speech = window.speechSynthesis
+      let utterance = new SpeechSynthesisUtterance(text)
+      utterance.voice = speechSynthesis.getVoices()[voice];
+      utterance.rate = speed
+      utterance.pitch = pitch
+      utterance.volume = volume
+      speech.cancel()
+      return speech.speak(utterance)
+}
+
+  </script>
+  <script>
 const areaElem = document.querySelector('#area');
 const dropElem = document.querySelector('#drop');
 const contentElem = document.querySelector('#content');
@@ -106,7 +121,40 @@ async function loadFile(file) {
   rendition.on("rendered", function(section) {
     const nextSection = section.next();
     const prevSection = section.prev();
-
+    
+    function iframeRef( frameRef ) {
+        return frameRef.contentWindow
+            ? frameRef.contentWindow.document
+            : frameRef.contentDocument
+    }
+    var inside = iframeRef( document.querySelector(`[id^=epubjs-view-]`) )
+    let inside_bod = []
+    for( let i = 1; i < inside.body.childNodes.length; i += 2){
+        if(inside.body.childNodes[i].tagName == 'P'){ 
+            inside_bod.push(inside.body.childNodes[i]);
+        }
+    }
+    if( inside_bod.length == 0 ) {
+            rendition.next();
+    }
+    else{
+        for(let i = 0; i < inside_bod.length; i ++){ 
+            //inside_bod[i].setAttribute('id','current_read');
+            inside_bod[i].scrollIntoView();
+            speak(inside_bod[i].innerHTML);
+            //inside_bod[i].removeAttribute('id');
+        }
+    }
+    console.log(inside_bod);
+     //for( let i = 0; i < inside_bod.length; i <
+    //document.addEventListener('keydown', logKey);
+    //function logKey(e) {
+    //  let command = document.querySelector('input[name="command"]:checked').value;
+    //  let keypressed = document.querySelector('input[name="keypressed"]:checked').value;
+    //  if (e.keyCode == keypressed && e[command]) alert(` ${command} + ${String.fromCharCode(e.keyCode)} pressed`);
+    //  e.preventDefault();
+    //  return false;
+    //}
     if(nextSection) {
       const nextNav = book.navigation.get(nextSection.href);
       const nextLabel = nextNav ? nextNav.label : "next";
@@ -114,7 +162,7 @@ async function loadFile(file) {
     } else {
       next.textContent = '';
     }
-
+    
     if(prevSection) {
       const prevNav = book.navigation.get(prevSection.href);
       const prevLabel = prevNav ? prevNav.label : "previous";
