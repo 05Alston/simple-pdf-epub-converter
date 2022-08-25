@@ -1,7 +1,7 @@
 from PyQt5.QtCore import QUrl
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget
 from PyQt5.QtWebEngineWidgets import QWebEngineSettings, QWebEngineView
-import os
+import os, platform
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -30,12 +30,15 @@ if __name__ == '__main__':
     win.show()
     if len(sys.argv) > 1:
         win.webView.setUrl(QUrl(f"file://{sys.argv[1]}"))
-    else:
+    elif str(platform.system())=="Linux":
         wd = os.path.abspath(sys.argv[0]).rsplit('/', 1)
         print(wd[0])
         test_pdf = "exitLoad.pdf"
         test_html = "index.html"
         test_file = "ebook/META-INF/container.xml"
+
+
+
         # if(test_file ==)
         path = f"file://{wd[0]}/{test_html}"
         print(path)
@@ -51,7 +54,23 @@ if __name__ == '__main__':
         # print(path)
         # print(QUrl(path))
         # win.webView.setUrl(QUrl(path))
+    elif str(platform.system()=="Windows"):
+        wd = os.path.abspath(sys.argv[0]).split('\\')
+        print(wd)
+        test_pdf = "exitLoad.pdf"
+        test_html = "index.html"
+        test_file = "ebook/META-INF/container.xml"
+        pth = ''
+        for w in wd:
+            pth += '/'+w
 
+        print(pth.rsplit('/', 1)[0])
+        path = f"file://{pth.rsplit('/', 1)[0]}/{test_html}"
+        print(path)
+        win.webView.setUrl(QUrl(path))
+    else:
+        print("Os not identified")
+        # can put html error page here
     sys.exit(app.exec_())
 
 
