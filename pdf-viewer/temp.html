@@ -65,8 +65,27 @@
       .calibre{
         color: black !important;
       }
+      .button {
+        border: none;
+        font-size: 90px;
+        background-color: white;
+        position: absolute;
+        right: 11px;
+        top: -18px;
+        cursor: pointer;
+        }
+      .dark-mode {
+        background-color: black;
+        color: white;
+      }
+      .dark-mode #ui>button, #drop>div {
+        background-color: white;
+        color: black;
+        cursor: pointer;
+      }
 
     </style>
+    
   </head>
   <body>
     <div id="content">
@@ -76,30 +95,36 @@
         <div>&nbsp; </div>
         <button  id="next"><a href="#next" class="navlink">...</a></button>
         <div>&nbsp; </div>
-        <button type="button" class="navlink" onclick="speechPause()">Pause</button>
-        <div>&nbsp; </divsetInterval(>
-        <button ,2000)type="button" class="navlink play-button"  onclick="speechPlay()" onmouseout="makeTrue()" onmouseover="newHover(event)">Resume</button>
+        <button type="button" id="pauseBtn" class="navlink" onclick="speechPause()">Pause</button>
+        <div>&nbsp; </div>
+        <button type="button" id='playBtn' class="navlink play-button"  onclick="speechPlay();" onmouseout="makeTrue()" onmouseover="playHover(event)">Play</button>
 
       </div>
     </div>
     <div id="drop"><div>Drag and drop an .epub file here</div></div>
+    <div class="button" onclick="myFunction()">&#9728</div>
   </body>
   <script src="js/jszip.min.js"></script>
   <script src="js/epub.min.js"></script>
   <script>
-    var playButton = document.querySelector(".play-button");
-    playButton.addEventListener("mouseover", changeDef);
+    function myFunction() {
+      var element = document.body;
+      element.classList.toggle("dark-mode");
+    }
+        
+    // var playButton = document.querySelector(".play-button");
+    // playButton.addEventListener("mouseover", changeDef);
     once=true
-    function newHover(event){
+    function playHover(event){
       if(once){
-      changeDef(event)}
+      sayPlay(event)}
     }
     function makeTrue() {
       once = true
     }
-    function changeDef(event){
+    function sayPlay(event){
       once=false
-      let cur = window.speechSynthesis 
+      let cur = window.speechSynthesis
       console.log(cur)
       cur.pause();
       var msg1 = new SpeechSynthesisUtterance();
@@ -147,8 +172,8 @@ next.addEventListener("click", function(e){
 const prev = document.getElementById("prev");
 prev.addEventListener("click", function(e){
   e.preventDefault();
-  rendition.prev();
   window.speechSynthesis.cancel()
+  rendition.prev();
 }, false);
 
 async function loadFile(file) {
@@ -172,7 +197,24 @@ async function loadFile(file) {
   rendition.display();
 
   rendition.on("rendered", function(section) {
-    main();
+    // main();
+    if(makeList() == 0){
+      console.log('empty list')
+      document.getElementById('playBtn').style.visibility = 'hidden';
+      document.getElementById('pauseBtn').style.visibility = 'hidden';
+    }
+    else{
+      if(!speechSynthesis.speaking){
+        document.getElementById('playBtn').style.visibility = 'visible';
+        document.getElementById('pauseBtn').style.visibility = 'hidden';
+      }
+      else if(speechSynthesis.speaking){
+        document.getElementById('playBtn').style.visibility = 'hidden';
+        document.getElementById('pauseBtn').style.visibility = 'visible';
+      }
+    }
+    
+    
     const nextSection = section.next();
     const prevSection = section.prev();
     console.log('hi');
@@ -217,27 +259,37 @@ async function loadFile(file) {
 }
 
 const speechPause = () => {
-  window.speechSynthesis.pause()
+  window.speechSynthesis.pause();
+  document.getElementById('playBtn').style.visibility = 'visible';
+  document.getElementById('pauseBtn').style.visibility = 'hidden';
 }
 
 const speechPlay= () => {
-  window.speechSynthesis.resume()
+  document.getElementById('playBtn').style.visibility = 'hidden';
+  document.getElementById('pauseBtn').style.visibility = 'visible';
+  console.log("play me aya")
+  if(window.speechSynthesis.paused){
+  window.speechSynthesis.resume()}
+  else{
+    console.log("chalu")
+    main()
+  }
 }
 
 function main(){
+  console.log('main')
     contentList=makeList()
     startTTS(contentList)
 }
     // contentList=makeList()
     // startTTS(contentList)
-
+function iframeRef( frameRef ) {
+    return frameRef.contentWindow
+        ? frameRef.contentWindow.document
+        : frameRef.contentDocument
+}
 function makeList(){
-  function iframeRef( frameRef ) {
-        return frameRef.contentWindow
-            ? frameRef.contentWindow.document
-            : frameRef.contentDocument
-    }
-    var inside = iframeRef( document.querySelector(`[id^=epubjs-view-]`) )
+    let inside = iframeRef( document.querySelector(`[id^=epubjs-view-]`) )
     console.log(inside)
     let inside_bod = []
     console.log('hello')
@@ -268,6 +320,26 @@ function checkEmpty(list){
   else
   return false
 }
+// async function play(List) {
+//   let inside = iframeRef( document.querySelector(`[id^=epubjs-view-]`) )
+//   for (i = 0; i < List.length; i++) {
+//     let j = 1;  
+//     count = 0;
+//     console.log(i)
+//     for(; j < inside.body.childNodes.length; j += 2){
+//       console.log(j)
+//       if(inside.body.childNodes[j].tagName === 'P'){ 
+//         count += 1;
+//       }
+//       if(i == count){
+//         console.log(count);
+//         inside.body.childNodes[j].style.backgroundColor = 'yellow';
+//         break;
+//       }
+//     }
+//     await getNextAudio(List[i].innerHTML);
+//     inside.body.childNodes[j].style.backgroundColor = 'white';
+//   }
 async function play(List) {
   for (i = 0; i < List.length; i++) {
     await getNextAudio(List[i].innerHTML);
@@ -281,6 +353,14 @@ async function play(List) {
     });
   } 
 }
+  async function getNextAudio(sentence) {
+    console.log(sentence);
+    let audio = new SpeechSynthesisUtterance(sentence);
+    window.speechSynthesis.speak(audio);
+    return new Promise(resolve => {
+      audio.onend = resolve;
+    });
+  } 
 // function readList(list){
 //   while(!checkEmpty(list)){ 
 //     console.log('kya he')
