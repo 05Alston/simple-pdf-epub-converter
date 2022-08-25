@@ -5,10 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ePub viewer</title>
     <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap');
+
       html, body {
         margin: 0;
         height: 100%;
         font-size: large;
+        background-color: white;
+        font-family: 'Poppins', sans-serif;
       }
       #content {
         width: 100%;
@@ -27,9 +31,19 @@
         display: flex;
         justify-content: center;
       }
-      #prev {
+      #prev , #next, button {
         text-align: right;
+        padding-top: 15px;
+        padding-bottom: 10px;
+        padding-left: 30px;
+        padding-right: 30px;
+        font-size: x-large;
+        background-color: black;
+        color: white;
+        border-radius: 20px;
+        margin-bottom: 3%;
       }
+      
       #ui a {
         flex: 10% 10% 0%;
       }
@@ -42,31 +56,59 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        font-size: 300%;
+        color: black;
       }
       .dragging {
         background: lightseagreen;
       }
+      .calibre{
+        color: black !important;
+      }
+
     </style>
   </head>
   <body>
     <div id="content">
       <div id="area"></div>
       <div id="ui">
-        <a id="prev" href="#prev" class="navlink">...</a>
+        <button id="prev"><a href="#prev" class="navlink">...</a></button>
         <div>&nbsp; </div>
-        <a id="next" href="#next" class="navlink">...</a>
+        <button  id="next"><a href="#next" class="navlink">...</a></button>
         <div>&nbsp; </div>
-        <button type="button" class="navlink">Pause</button>
-        <div>&nbsp; </div>
-        <button type="button" class="navlink">Resume</button>
+        <button type="button" class="navlink" onclick="speechPause()">Pause</button>
+        <div>&nbsp; </divsetInterval(>
+        <button ,2000)type="button" class="navlink play-button"  onclick="speechPlay()" onmouseout="makeTrue()" onmouseover="newHover(event)">Resume</button>
 
       </div>
     </div>
-    <div id="drop"><div>drag and drop an .epub file here</div></div>
+    <div id="drop"><div>Drag and drop an .epub file here</div></div>
   </body>
   <script src="js/jszip.min.js"></script>
   <script src="js/epub.min.js"></script>
   <script>
+    var playButton = document.querySelector(".play-button");
+    playButton.addEventListener("mouseover", changeDef);
+    once=true
+    function newHover(event){
+      if(once){
+      changeDef(event)}
+    }
+    function makeTrue() {
+      once = true
+    }
+    function changeDef(event){
+      once=false
+      let cur = window.speechSynthesis 
+      console.log(cur)
+      cur.pause();
+      var msg1 = new SpeechSynthesisUtterance();
+      msg1.text = "Play button";
+        console.log(msg1)
+        window.speechSynthesis.speak(msg1)
+      cur.resume()
+      
+    }
     // const speech = window.speechSynthesis
     //   const speak = (text, voice = 0, speed = 1, volume = 1, pitch = 1) => {
     //   let utterance = new SpeechSynthesisUtterance(text)
@@ -98,15 +140,15 @@ let rendition = {
 const next = document.getElementById("next");
 next.addEventListener("click", function(e){
   e.preventDefault();
+  window.speechSynthesis.cancel()
   rendition.next();
-  main()
 }, false);
 
 const prev = document.getElementById("prev");
 prev.addEventListener("click", function(e){
   e.preventDefault();
   rendition.prev();
-  main()
+  window.speechSynthesis.cancel()
 }, false);
 
 async function loadFile(file) {
@@ -130,6 +172,7 @@ async function loadFile(file) {
   rendition.display();
 
   rendition.on("rendered", function(section) {
+    main();
     const nextSection = section.next();
     const prevSection = section.prev();
     console.log('hi');
@@ -173,6 +216,14 @@ async function loadFile(file) {
   });
 }
 
+const speechPause = () => {
+  window.speechSynthesis.pause()
+}
+
+const speechPlay= () => {
+  window.speechSynthesis.resume()
+}
+
 function main(){
     contentList=makeList()
     startTTS(contentList)
@@ -205,7 +256,8 @@ function startTTS(list){
       rendition.next()
     }
     else{
-      readList(list)
+      console.log('not empty')
+      play(list)
     }
 }
 function checkEmpty(list){
@@ -216,15 +268,31 @@ function checkEmpty(list){
   else
   return false
 }
-function readList(list){
-  while(checkEmpty(list)){ 
-        var msg = new SpeechSynthesisUtterance();
-        msg.text = list[0].innerHTML;
-        console.log(msg)
-        window.speechSynthesis.speak(msg)
-        list[0].remove
-    }
+async function play(List) {
+  for (i = 0; i < List.length; i++) {
+    await getNextAudio(List[i].innerHTML);
+  }
+  async function getNextAudio(sentence) {
+    console.log(sentence);
+    let audio = new SpeechSynthesisUtterance(sentence);
+    window.speechSynthesis.speak(audio);
+    return new Promise(resolve => {
+      audio.onend = resolve;
+    });
+  } 
 }
+// function readList(list){
+//   while(!checkEmpty(list)){ 
+//     console.log('kya he')
+//     var msg = new SpeechSynthesisUtterance();
+//     msg.text = list[0].innerHTML;
+//     console.log(msg)
+//     window.speechSynthesis.speak(msg)
+//     console.log(list)
+//     list.shift()
+//   }
+// }
+
 function getFirstFile(ev) {
   if (ev.dataTransfer.items) {
     const items = [...ev.dataTransfer.items].filter(item => item.kind === 'file');
