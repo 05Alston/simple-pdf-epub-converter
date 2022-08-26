@@ -128,6 +128,7 @@ class Ui_MainWindow(object):
         "\n"
         "")
                 self.toolButton_2.setObjectName("toolButton_2")
+                self.toolButton.clicked.connect(self.open)
                 self.label_2 = QtWidgets.QLabel(self.centralwidget)
                 self.label_2.setGeometry(QtCore.QRect(-10, 0, 81, 61))
                 self.label_2.setText("")
@@ -164,9 +165,13 @@ class Ui_MainWindow(object):
         def file_open(self):
                 self.name, _ = QtWidgets.QFileDialog.getOpenFileName(None, 'Open File', options=QtWidgets.QFileDialog.DontUseNativeDialog)
                 self.invconvert.setText(self.name)
-                subprocess.run(['calibre-debug','convert.py',self.name,str(self.name.rsplit('.',1)[0])+'.epub'])
+                if self.name.rsplit('.',1)[1] == 'epub':
+                        print('same file extension.')
+                elif self.name:
+                        subprocess.run(['calibre-debug','convert.py',self.name,str(self.name.rsplit('.',1)[0])+'.epub'])
 
-
+        def open(self):
+                subprocess.run(['python','proto2.py'])
 if __name__ == "__main__":
         import sys
         app = QtWidgets.QApplication(sys.argv)

@@ -34,7 +34,7 @@ if __name__ == '__main__':
         wd = os.path.abspath(sys.argv[0]).rsplit('/', 1)
         print(wd[0])
         test_pdf = "exitLoad.pdf"
-        test_html = "index.html"
+        test_html = "temp.html"
         test_file = "ebook/META-INF/container.xml"
 
 
@@ -58,7 +58,7 @@ if __name__ == '__main__':
         wd = os.path.abspath(sys.argv[0]).split('\\')
         print(wd)
         test_pdf = "exitLoad.pdf"
-        test_html = "index.html"
+        test_html = "temp.html"
         test_file = "ebook/META-INF/container.xml"
         pth = ''
         for w in wd:
