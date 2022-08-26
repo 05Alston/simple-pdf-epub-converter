@@ -121,11 +121,50 @@
       <button onclick="myFunction()" class="sun"><div>&#9728</div></button>
 
       <script>
+          isDark = false;
         function myFunction() {
           var element = document.body;
+          let inside = iframeRef( document.querySelector(`[id^=epubjs-view-]`) );
+          if(!isDark){
+              var style = (function() {
+                // Create the <style> tag
+                var style = inside.createElement("style");
+        
+                // WebKit hack
+                style.appendChild(inside.createTextNode(""));
+        
+                // Add the <style> element to the page
+                inside.head.appendChild(style);
+          
+                console.log(style.sheet.cssRules); // length is 0, and no rules
+        
+                return style;
+            })();
+        style.sheet.insertRule('.calibre {\
+        color:white;\
+        }', 0);}
+          else {
+              var style = (function() {
+                // Create the <style> tag
+                var style = inside.createElement("style");
+        
+                // WebKit hack
+                style.appendChild(inside.createTextNode(""));
+        
+                // Add the <style> element to the page
+                inside.head.appendChild(style);
+          
+                console.log(style.sheet.cssRules); // length is 0, and no rules
+        
+                return style;
+            })();
+        style.sheet.insertRule('.calibre {\
+        color:black;\
+        }', 0);}
+                    isDark = !isDark;
           element.classList.toggle("dark-mode");
           element.classList.toggle("div-dark")
-        }      
+        }     
       </script>
 
       <div id="content">
