@@ -56,9 +56,9 @@
         <div>&nbsp; </div>
         <a id="next" href="#next" class="navlink">...</a>
         <div>&nbsp; </div>
-        <button type="button" class="navlink">Pause</button>
+        <button type="button" class="navlink" onclick="speechPause()">Pause</button>
         <div>&nbsp; </div>
-        <button type="button" class="navlink">Resume</button>
+        <button type="button" class="navlink"  onclick="speechPlay()">Resume</button>
 
       </div>
     </div>
@@ -98,6 +98,7 @@ let rendition = {
 const next = document.getElementById("next");
 next.addEventListener("click", function(e){
   e.preventDefault();
+  window.speechSynthesis.cancel()
   rendition.next();
 }, false);
 
@@ -105,6 +106,7 @@ const prev = document.getElementById("prev");
 prev.addEventListener("click", function(e){
   e.preventDefault();
   rendition.prev();
+  window.speechSynthesis.cancel()
 }, false);
 
 async function loadFile(file) {
@@ -128,41 +130,31 @@ async function loadFile(file) {
   rendition.display();
 
   rendition.on("rendered", function(section) {
+    main();
     const nextSection = section.next();
     const prevSection = section.prev();
+    console.log('hi');
     
-    function iframeRef( frameRef ) {
-        return frameRef.contentWindow
-            ? frameRef.contentWindow.document
-            : frameRef.contentDocument
-    }
-    var inside = iframeRef( document.querySelector(`[id^=epubjs-view-]`) )
-    let inside_bod = []
-    console.log('hello')
-    console.log(inside_bod)
-    for( let i = 1; i < inside.body.childNodes.length; i += 2){
-        if(inside.body.childNodes[i].tagName == 'P'){ 
-            inside_bod.push(inside.body.childNodes[i]);
-        }
-    }
-    if( inside_bod.length === 0 ) {
-            rendition.next();
-    }
-    else{
-        for(let i = 0; i < inside_bod.length; i ++){ 
-            // inside_bod[i].setAttribute('id','current_read');
-            // inside_bod[i].scrollIntoView();
-            var msg = new SpeechSynthesisUtterance();
-            msg.text = inside_bod[i].innerHTML;
-            console.log(msg)
-            window.speechSynthesis.speak(msg)
+    
+    // if( inside_bod.length === 0 ) {
+    //         rendition.next();
+    // }
+    // else{
+    //     for(let i = 0; i < inside_bod.length; i ++){ 
+    //         // inside_bod[i].setAttribute('id','current_read');
+    //         // inside_bod[i].scrollIntoView();
+    //         var msg = new SpeechSynthesisUtterance();
+    //         msg.text = inside_bod[i].innerHTML;
+    //         console.log(msg)
+    //         window.speechSynthesis.speak(msg)
             
-            // inside_bod[i].removeAttribute('id');
-        }
-        // inside_bod = []
-        rendition.next(); 
-    }
-    console.log(inside_bod);
+    //         // inside_bod[i].removeAttribute('id');
+    //     }
+    //     // inside_bod = []
+    //     rendition.next(); 
+    // }
+
+    // console.log(inside_bod);
     if(nextSection) {
       const nextNav = book.navigation.get(nextSection.href);
       const nextLabel = nextNav ? nextNav.label : "next";
@@ -182,6 +174,71 @@ async function loadFile(file) {
   });
 }
 
+const speechPause = () => {
+  window.speechSynthesis.pause()
+}
+
+const speechPlay= () => {
+  window.speechSynthesis.resume()
+}
+
+function main(){
+    contentList=makeList()
+    startTTS(contentList)
+}
+    // contentList=makeList()
+    // startTTS(contentList)
+
+function makeList(){
+  function iframeRef( frameRef ) {
+        return frameRef.contentWindow
+            ? frameRef.contentWindow.document
+            : frameRef.contentDocument
+    }
+    var inside = iframeRef( document.querySelector(`[id^=epubjs-view-]`) )
+    console.log(inside)
+    let inside_bod = []
+    console.log('hello')
+    // console.log(inside.body.childNodes.length)
+    for( let i = 1; i < inside.body.childNodes.length; i += 2){
+      console.log(inside.body.childNodes[i].className)
+      if(inside.body.childNodes[i].tagName === 'P'){ 
+          inside_bod.push(inside.body.childNodes[i]);
+      }
+    }
+    console.log(inside_bod)
+    return inside_bod
+}
+function startTTS(list){
+    if(checkEmpty(list)){
+      rendition.next()
+    }
+    else{
+      console.log('not empty')
+      play(list)
+    }
+}
+function checkEmpty(list){
+  if( list.length === 0 ) {
+        // rendition.next();
+        return true
+  }
+  else
+  return false
+}
+async function play(List) {
+  for (i = 0; i < List.length; i++) {
+    await getNextAudio(List[i].innerHTML);
+  }
+  async function getNextAudio(sentence) {
+    console.log(sentence);
+    let audio = new SpeechSynthesisUtterance(sentence);
+    window.speechSynthesis.speak(audio);
+    return new Promise(resolve => {
+      audio.onend = resolve;
+    });
+  } 
+}
 function getFirstFile(ev) {
   if (ev.dataTransfer.items) {
     const items = [...ev.dataTransfer.items].filter(item => item.kind === 'file');
