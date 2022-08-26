@@ -138,6 +138,10 @@
           <button type="button" id="pauseBtn" class="navlink" onclick="speechPause()">Pause</button>
           <div>&nbsp; </div>
           <button type="button" id='playBtn' class="navlink play-button"  onclick="speechPlay();" onmouseout="makeTrue()" onmouseover="playHover(event)">Play</button>
+          <div>&nbsp; </div>
+          <button type="button" id="pauseBtn" class="navlink" onclick="zoomIn()">Zoom In</button>
+          <div>&nbsp; </div>
+          <button type="button" id="pauseBtn" class="navlink" onclick="zoomOut()">Zoom Out</button>
         </div>
       </div>
 
@@ -208,14 +212,65 @@
       window.speechSynthesis.cancel()
       rendition.next();
     }, false);
-
+    
     const prev = document.getElementById("prev");
     prev.addEventListener("click", function(e){
       e.preventDefault();
       window.speechSynthesis.cancel()
       rendition.prev();
     }, false);
-
+    
+    fontSize = 1.0
+    const zoomIn = () => {
+        fontSize += 0.1
+        let inside = iframeRef( document.querySelector(`[id^=epubjs-view-]`) )
+        var style = (function() {
+            // Create the <style> tag
+            var style = inside.createElement("style");
+        
+            // WebKit hack
+            style.appendChild(inside.createTextNode(""));
+        
+            // Add the <style> element to the page
+            inside.head.appendChild(style);
+          
+            console.log(style.sheet.cssRules); // length is 0, and no rules
+        
+            return style;
+        })();
+        style.sheet.insertRule('.calibre {\
+            display: block;\
+            font-size: '+fontSize+'em;\
+            padding-left: 0;\
+            padding-right: 0;\
+            margin: 0 5pt;\
+        }', 0);
+    }
+    const zoomOut = () => {
+    fontSize -= 0.1        
+    let inside = iframeRef( document.querySelector(`[id^=epubjs-view-]`) )
+    var style = (function() {
+        // Create the <style> tag
+        var style = inside.createElement("style");
+    
+        // WebKit hack
+        style.appendChild(inside.createTextNode(""));
+    
+        // Add the <style> element to the page
+        inside.head.appendChild(style);
+      
+        console.log(style.sheet.cssRules); // length is 0, and no rules
+    
+        return style;
+    })();
+    style.sheet.insertRule('.calibre {\
+        display: block;\
+        font-size: '+fontSize+'em;\
+        padding-left: 0;\
+        padding-right: 0;\
+        margin: 0 5pt;\
+    }', 0);
+    }
     async function loadFile(file) {
       dropElem.style.display = 'none';
       areaElem.style.display = '';
